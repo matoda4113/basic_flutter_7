@@ -25,7 +25,7 @@ class PostController extends GetxController {
   }
 
   //포스트 상세조회
-  Future<PostVo> getCommunityDetail(String docId) async {
+  Future<PostVo> getPostDetail(String docId) async {
     try{
       PostVo postDetail = await saranFirebaseService.getPostDetail(docId);
       return postDetail;
@@ -33,6 +33,37 @@ class PostController extends GetxController {
       throw Exception(error);
     }
   }
+
+  //포스트 작성하기
+  Future<void> writePost(PostVo userPost) async {
+    try{
+      await saranFirebaseService.writePost(userPost);
+
+    }catch(error){
+      throw Exception(error);
+    }
+  }
+
+  //포스트 수정하기
+  Future<void> updatePost({required String docId ,required String contents}) async {
+    try{
+      await saranFirebaseService.updatePost(docId : docId , contents : contents);
+
+    }catch(error){
+      throw Exception(error);
+    }
+  }
+
+  //포스트 삭제하기
+  Future<void> deletePost(String docId) async {
+    try{
+      await saranFirebaseService.deletePost(docId);
+
+    }catch(error){
+      throw Exception(error);
+    }
+  }
+
 
 
 }

@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostVo {
+  String? docId;
   String? writerId;
   String? title;
   String? contents;
@@ -12,6 +13,7 @@ class PostVo {
 
 
   PostVo({
+    this.docId,
     this.writerId,
     this.title,
     this.contents,
@@ -22,6 +24,7 @@ class PostVo {
   });
 
   PostVo.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+    docId = documentSnapshot.id;
     writerId = documentSnapshot['writerId'];
     title = documentSnapshot['title'];
     contents = documentSnapshot['contents'];
@@ -36,7 +39,7 @@ class PostVo {
     data['writerId'] = writerId??"";
     data['title'] = title??"";
     data['contents'] = contents??"";
-    data['keyword'] = keyword??"";
+    data['keyword'] = keyword??[];
     data['isDeleted'] = isDeleted??false;
     data['createAt'] = createAt??Timestamp.now();
     data['updateAt'] = updateAt??Timestamp.now();
