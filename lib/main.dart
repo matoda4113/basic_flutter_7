@@ -1,9 +1,11 @@
 import 'package:basic_flutter_7/pages/main_page.dart';
+import 'package:basic_flutter_7/pages/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'controller/post_controller.dart';
+import 'controller/user_controller.dart';
 import 'firebase_options.dart';
 
 void main() async{
@@ -15,6 +17,7 @@ void main() async{
   );
 
   Get.put(PostController());
+  Get.put(UserController());
 
   runApp(const MyApp());
 }
@@ -29,6 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       home: MainPage(),
+
     );
   }
 }
