@@ -11,9 +11,9 @@ class UserController extends GetxController {
   UserVo? myInfo;
 
   ///유저등록(회원가입)
-  Future<void> addUser(UserVo userInfo) async{
+  Future<void> addUser(String email ,String password) async{
     try{
-      await saranFirebaseService.signUpWithEmailAndPassword(userInfo);
+      await saranFirebaseService.signUpWithEmailAndPassword(email, password);
     }catch(error){
       throw error;
     }
