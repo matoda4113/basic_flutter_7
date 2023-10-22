@@ -35,29 +35,51 @@ class _MainPageState extends State<MainPage> {
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(title: Text("메인페이지"),),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
+          drawer: GetBuilder<UserController>(
+            builder: (controller2) {
+              return Drawer(
+                child: ListView(
                   padding: EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Image.network('https://cdn.pixabay.com/photo/2023/05/02/21/08/river-7966163_1280.png',fit: BoxFit.cover,),
+                  children: <Widget>[
+                    DrawerHeader(
+                      padding: EdgeInsets.zero,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                      ),
+                      child: Image.network('https://cdn.pixabay.com/photo/2023/05/02/21/08/river-7966163_1280.png',fit: BoxFit.cover,),
+                    ),
+                    if(controller2.myInfo==null)
+                    ListTile(
+                      leading: Icon(Icons.login),
+                      title: Text('로그인하기'),
+                      onTap: () {
+                        Get.to(()=>SignInPage());
+                      },
+                    ),
+                    if(controller2.myInfo!=null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(controller2.myInfo?.email??""),
+                        ListTile(
+                          leading: Icon(Icons.login),
+                          title: Text('마이페이지'),
+                          onTap: () {
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.logout),
+                          title: Text('로그아웃'),
+                          onTap: () {
+                            controller2.logout();
+                          },
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-                if(userController.myInfo==null)
-                ListTile(
-                  leading: Icon(Icons.login),
-                  title: Text('로그인하기'),
-                  onTap: () {
-                    Get.to(()=>SignInPage());
-                  },
-                ),
-                if(userController.myInfo!=null)
-                Text(userController.myInfo?.email??"")
-              ],
-            ),
+              );
+            }
           ),
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.edit),

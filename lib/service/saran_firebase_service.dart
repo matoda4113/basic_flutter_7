@@ -102,4 +102,39 @@ class SaranFirebaseService {
       }
     }
   }
+
+  //로그인
+  Future<UserVo> signInWithEmailAndPassword(String email, String password) async {
+    try {
+
+      // 1. firebase auth 에 email과 password로 로그인
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // 2. 로그인 성공 시 사용자의 UID 가져오기
+      String? userUid = userCredential.user?.uid;
+
+      // 3.사용자의 UID를 docId로 사용하고있는 문서조회해서 사용자 가져오기
+      DocumentSnapshot documentSnapshot = await userCollection.doc(userUid).get();
+
+      // 4. UserVo.fromDocumentSnapshot 로 만들어둔 메소드를 통해 documentSnapshot를 넣고 UserVo인스턴스 만들어서 리턴
+      return UserVo.fromDocumentSnapshot(documentSnapshot);
+
+    } catch (error) {
+      // 로그인 실패 시 예외 처리
+      if (error is FirebaseAuthException) {
+        if (error.code == 'user-not-found') {
+          throw '계정정보를 찾을 수 없습니다.';
+        }
+      }else{
+
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+
+
 }
