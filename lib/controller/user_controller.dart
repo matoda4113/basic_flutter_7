@@ -63,6 +63,7 @@ class UserController extends GetxController {
   ///로그아웃
   Future<void> logout() async{
     try{
+      await saranFirebaseService.signOut();
       myInfo = null;
       update();
       SharedPreferences prefs = await SharedPreferences.getInstance();

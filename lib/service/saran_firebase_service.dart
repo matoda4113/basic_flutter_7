@@ -135,6 +135,16 @@ class SaranFirebaseService {
     }
   }
 
+  //로그아웃
+  Future<void> signOut() async {
+    try {
+      auth.signOut();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
 
 
 }

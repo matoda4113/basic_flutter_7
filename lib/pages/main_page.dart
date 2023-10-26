@@ -7,6 +7,8 @@ import 'package:basic_flutter_7/pages/write_post_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'my_page.dart';
+
 ///MainPage
 ///담당자 : ---
 
@@ -65,6 +67,7 @@ class _MainPageState extends State<MainPage> {
                           leading: Icon(Icons.login),
                           title: Text('마이페이지'),
                           onTap: () {
+                            Get.to(()=>MyPage());
                           },
                         ),
                         ListTile(
