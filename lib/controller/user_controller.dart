@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,9 +86,43 @@ class UserController extends GetxController {
   }
 
 
-  ///내 유저정보 가져오기 ( 로그인과 상관없이 내 유저정보를 새로고침해서 다시들고오거나 할때사용)
-  Future<void> getUser(String userUid) async{
+  ///내 유저정보 가져오기
+  Future<void> getMyInfo() async{
+
+    if(myInfo==null){
+      return;
+    }
+
+    try{
+      UserVo info = await saranFirebaseService.getMyInfo(myInfo!.docId!);
+      myInfo= info;
+      update();
+
+    }catch(error){
+      throw error;
+    }
+
   }
+
+
+  ///내 이미지 변경하기
+  Future<void> editProfileImage(File image) async{
+
+    if(myInfo==null){
+      return;
+    }
+
+    try{
+      await saranFirebaseService.editImage(myInfo!.docId!,image);
+
+      getMyInfo();
+
+    }catch(error){
+      throw error;
+    }
+
+  }
+
 
 }
 

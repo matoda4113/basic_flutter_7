@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import '../model/post_list_model.dart';
 import '../vo/postVo.dart';
 import '../vo/userVo.dart';
@@ -11,6 +13,9 @@ import '../vo/userVo.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 FirebaseAuth auth = FirebaseAuth.instance;
+
+FirebaseStorage storage = FirebaseStorage.instance;
+
 CollectionReference post = firestore.collection('Post');
 CollectionReference userCollection = firestore.collection('User');
 
@@ -141,6 +146,44 @@ class SaranFirebaseService {
       auth.signOut();
     } catch (error) {
       throw error;
+    }
+  }
+
+  //내정보 가져오기
+  Future<UserVo> getMyInfo(String userUid) async {
+    try {
+
+      DocumentSnapshot documentSnapshot = await userCollection.doc(userUid).get();
+      return UserVo.fromDocumentSnapshot(documentSnapshot);
+
+    } catch (error) {
+
+      throw error;
+    }
+  }
+
+  //이미지 수정
+  Future<void> editImage(String userUid,File file) async {
+
+    try{
+      //1. 스토리지의 파일경로
+      Reference ref = storage.ref("profileImageUrl/${userUid}.${file.path.split('.').last}");
+
+      //2. 파일 올리기
+      await ref.putFile(file);
+
+      //3. 올린 파일의 주소 불러오기
+      final String _urlString = await ref.getDownloadURL();
+
+      //4. firestore에서 해당 userUid를 가진 문서를 찾아서 그 유저 문서의 imagePath와 updateAt 수정하기
+      await userCollection.doc(userUid).update({
+        'imagePath': _urlString,
+        'updateAt':Timestamp.now()
+      });
+
+    }catch(error){
+
+      throw Exception(error);
     }
   }
 
